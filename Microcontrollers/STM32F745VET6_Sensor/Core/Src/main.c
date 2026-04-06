@@ -608,9 +608,9 @@ int main(void)
 				else{HAL_UART_Transmit(&huart2, (uint8_t*)dArm, strlen(dArm), HAL_MAX_DELAY);}
 			}while(armed_c1 == false || armed_c2 == false);
 
+			invalidCommand:;
 			HAL_UART_Transmit(&huart2, (uint8_t*)zeroServ, strlen(zeroServ), HAL_MAX_DELAY);
 			HAL_UART_Receive(&huart2, cmCommand, 3, HAL_MAX_DELAY);
-
 			if((char)cmCommand[0] == 'P' && (char)cmCommand[2] == 'S'){
 				HAL_UART_Transmit(&huart2, (uint8_t*)stopMsg, strlen(stopMsg), HAL_MAX_DELAY);
 				bool doneZero = false;
@@ -620,6 +620,9 @@ int main(void)
 				if((char)cmCommand[0] == 'S' && (char)cmCommand[2] == 'P'){doneZero = true;}
 				}while(doneZero == false);
 			}
+			else if((char)cmCommand[0] == 'N' && (char)cmCommand[2] == 'G'){}
+			else{goto invalidCommand;}
+
 				while (armed_c1 == true && armed_c2 == true){
 							bnoAccel();
 							d1Read();
